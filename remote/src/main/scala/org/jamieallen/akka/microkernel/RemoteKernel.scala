@@ -14,15 +14,16 @@ class Hello extends Actor with ActorLogging {
 
 class RemoteKernel extends Bootable {
   val config2 = ConfigFactory.parseString("""
-			akka.actor.provider = akka.remote.RemoteActorRefProvider
-			akka.remote.netty.hostname = "127.0.0.1"
-			akka.remote.netty.port = 2552
-	      """)
+  			akka.actor.provider = akka.remote.RemoteActorRefProvider
+  			akka.remote.netty.hostname = "127.0.0.1"
+  			akka.remote.netty.port = 2552
+  	      """)
 
+  //  val sys2 = ActorSystem("sys2", ConfigFactory.load)
   val sys2 = ActorSystem("sys2", config2)
 
   def startup = {
-    println("Started remote node!")
+    println("Started remote node, waiting for work!")
   }
 
   def shutdown = {

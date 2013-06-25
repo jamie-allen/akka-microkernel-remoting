@@ -8,23 +8,12 @@ import akka.actor.ActorLogging
 
 class Hello extends Actor with ActorLogging {
   def receive = {
-    case x => log.warning("received {} at {}", x, self)
+    case x => log.warning("Received {} at {}", x, self)
   }
 }
 
 class LocalKernel extends Bootable {
-  val config1 = ConfigFactory.parseString("""
-			akka.actor.provider = akka.remote.RemoteActorRefProvider
-			akka.remote.netty.hostname = "127.0.0.1"
-			akka.remote.netty.port = 2553
-			akka.actor.deployment./hello {
-			  router = round-robin
-			  nr-of-instances = 10
-			  target.nodes = ["akka://sys1@127.0.0.1:2553","akka://sys2@127.0.0.1:2552"]
-			}
-	  """)
-
-  val sys1 = ActorSystem("sys1", config1)
+  val sys1 = ActorSystem("sys1", ConfigFactory.load)
 
   def startup = {
     val hello = sys1.actorOf(Props[Hello].withRouter(FromConfig), "hello")
